@@ -1,0 +1,215 @@
+/* 한글 웹폰트 (Pretendard) — 다른 폰트로 바꾸려면 이 줄과 아래 --font-sans 를 바꾸세요 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   ★ 디자인 토큰 (사이트 전체의 색·모서리·폰트)
+   --------------------------------------------------------------------------
+   이 블록의 값만 바꾸면 사이트 전체 분위기가 바뀝니다.
+   shadcn/ui, 21st.dev 컴포넌트도 이 이름(--primary, --muted ...)을 그대로 씁니다.
+
+   - background / foreground : 기본 배경색 / 기본 글자색
+   - primary                 : 포인트 색 (주요 버튼 등)
+   - muted                   : 은은한 배경 (카드, 구역 배경)
+   - muted-foreground        : 흐린 글자 (설명문)
+   - border                  : 테두리 선
+   - radius                  : 모서리 둥글기 (0 = 각진, 1rem = 많이 둥근)
+
+   색은 #9a0002 같은 HEX 값으로 바꿔도 됩니다.
+   ========================================================================== */
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #111111;
+
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+
+  --primary: #3fb54a;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f4f4f5;
+  --secondary-foreground: #111111;
+
+  --muted: #eef1ef;
+  --muted-foreground: #6b6b6b;
+
+  --accent: #f4f4f5;
+  --accent-foreground: #111111;
+
+  --destructive: #dc2626;
+
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #3fb54a;
+
+  /* 첫 화면(히어로)의 짙은 초록 배경과 상단 메뉴의 숯색 */
+  --hero: #213b38;
+  --hero-foreground: #f1f5f4;
+  --hero-muted: #9fb7b2;
+  --nav: #2a2b2f;
+  --nav-foreground: #ffffff;
+
+  /* 폰트 */
+  --font-body: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: var(--font-body); /* 제목용 폰트를 따로 쓰고 싶으면 여기만 바꾸기 */
+}
+
+/* 다크 모드용 값 (html 태그에 class="dark" 를 붙이면 적용) */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #141414;
+  --card-foreground: #fafafa;
+  --popover: #141414;
+  --popover-foreground: #fafafa;
+  --primary: #4cc457;
+  --primary-foreground: #ffffff;
+  --hero: #172a28;
+  --hero-foreground: #f1f5f4;
+  --hero-muted: #8fa8a3;
+  --nav: #141516;
+  --nav-foreground: #ffffff;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #fafafa;
+  --muted: #1f1f1f;
+  --muted-foreground: #a1a1a1;
+  --accent: #1f1f1f;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --ring: #525252;
+}
+
+/* 위 토큰을 Tailwind 클래스(bg-primary, text-muted-foreground 등)로 연결 — 수정할 필요 없음 */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-hero: var(--hero);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-muted: var(--hero-muted);
+  --color-nav: var(--nav);
+  --color-nav-foreground: var(--nav-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    word-break: keep-all; /* 한글 단어가 중간에 끊기지 않게 */
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+}
+
+/* 움직임(애니메이션) — 첫 화면 메인 이미지(부스)와 네컷 사진이 번갈아 나오는 9초 반복
+   ┌ 0.0 ~ 1.6초 : 부스가 왼쪽 위 45도에서 두 바퀴 돌며 작게(0.15배) 날아와 커지며 안착
+   │               네컷 사진은 이때 서서히 사라짐 (안착 순간 완전히 사라짐)
+   ├ 1.6 ~ 4.6초 : 부스 3초 유지
+   ├ 4.6 ~ 5.2초 : 부스가 서서히 사라짐
+   ├ 5.2 ~ 6.0초 : 네컷 사진이 서서히 나타남
+   └ 6.0 ~ 9.0초 : 네컷 사진 3초 유지 → 다시 처음부터 (부스가 다시 날아옴)
+   % 는 9초 중 몇 % 지점인지 (예: 1.6초 = 17.8%). 시간을 바꾸려면 두 움직임의 % 를 함께 바꾸세요. */
+@theme {
+  --animate-booth-cycle: booth-cycle 9s linear 0.3s infinite both;
+  --animate-photos-cycle: photos-cycle 9s linear 0.3s infinite both;
+
+  @keyframes booth-cycle {
+    0% {
+      transform: translate(-160%, -160%) rotate(-720deg) scale(0.15);
+      opacity: 0;
+      animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    2.5% {
+      opacity: 1;
+    }
+    15% {
+      /* 살짝 크게 됐다가 */
+      transform: translate(0, 0) rotate(0deg) scale(1.06);
+      animation-timing-function: ease-out;
+    }
+    17.8%,
+    51.1% {
+      /* 제자리에 툭 안착 → 3초 유지 */
+      transform: translate(0, 0) rotate(0deg) scale(1);
+      opacity: 1;
+      animation-timing-function: ease-in;
+    }
+    57.8% {
+      /* 서서히 사라짐 */
+      transform: translate(0, 0) rotate(0deg) scale(0.92);
+      opacity: 0;
+    }
+    58%,
+    100% {
+      /* 안 보이는 동안 출발 위치로 돌아가 대기 */
+      transform: translate(-160%, -160%) rotate(-720deg) scale(0.15);
+      opacity: 0;
+    }
+  }
+
+  @keyframes photos-cycle {
+    0%,
+    6.7% {
+      opacity: 1;
+      transform: scale(1);
+      animation-timing-function: ease-in-out;
+    }
+    17.8%,
+    57.8% {
+      /* 부스가 안착할 때 완전히 사라짐 → 부스가 사라질 때까지 숨어 있음 */
+      opacity: 0;
+      transform: scale(0.94);
+      animation-timing-function: ease-out;
+    }
+    66.7%,
+    100% {
+      /* 서서히 나타나 3초 유지 */
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* 첫 화면 배경의 희미한 낙서 무늬 (말풍선, 별, 하트, 종이비행기, 카메라) */
+.hero-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 20h30a6 6 0 0 1 6 6v14a6 6 0 0 1-6 6H36l-9 8v-8h-5a6 6 0 0 1-6-6V26a6 6 0 0 1 6-6z'/%3E%3Cpath d='M128 26l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z'/%3E%3Ccircle cx='150' cy='118' r='12'/%3E%3Cpath d='M28 132c0-7 9-11 13-4 4-7 13-3 13 4 0 9-13 16-13 16s-13-7-13-16z'/%3E%3Cpath d='M78 86l44-18-18 44-7-19z'/%3E%3Crect x='86' y='140' width='30' height='20' rx='4'/%3E%3Ccircle cx='101' cy='150' r='5'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
