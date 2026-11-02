@@ -6,6 +6,7 @@ import { getHeroText, getItems } from "@/lib/data";
 import type { Item } from "@/lib/types";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { MagnifyArea, MagnifyText } from "@/components/ui/magnify-text";
 import { cn } from "@/lib/utils";
 
 /* 첫 화면(히어로).
@@ -26,6 +27,8 @@ export async function Hero() {
   ]);
   const { heroTagline, heroMainImage, heroBackImages } = siteConfig;
   const titleLines = hero.title.split("\n");
+  // 배지 글자를 " - " 앞(설명)과 뒤(브랜드 이름)로 나눔
+  const [eyebrowLead, eyebrowBrand] = hero.eyebrow.split(" - ");
   // 관리자에서 올린 메인 이미지가 없으면 site.config.ts 의 기본 사진을 사용
   const main: SlotItem = mainItems[0] ?? {
     title: heroMainImage.title,
@@ -37,8 +40,9 @@ export async function Hero() {
 
   return (
     <section id="top" className="relative isolate overflow-hidden">
-      {/* ── 위쪽: 짙은 초록 영역 ── */}
-      <div className="relative isolate bg-hero text-hero-foreground">
+      {/* ── 위쪽: 짙은 초록 영역 ──
+           MagnifyArea: 마우스가 지나가는 곳의 글자가 돋보기처럼 살짝 커짐 (components/ui/magnify-text.tsx) */}
+      <MagnifyArea className="relative isolate bg-hero text-hero-foreground">
         {/* 희미한 낙서 무늬 + 메인 이미지 뒤 은은한 빛 */}
         <div className="hero-pattern absolute inset-0 -z-10" />
         <div className="absolute -left-40 top-1/4 -z-10 size-[36rem] rounded-full bg-primary/15 blur-3xl" />
@@ -84,10 +88,22 @@ export async function Hero() {
 
           {/* 오른쪽 위: 글자, 버튼 */}
           <div className="order-1 lg:col-start-2 lg:row-start-1 lg:self-end">
-            {/* 작은 머리글 (알약 모양 배지) */}
-            <p className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm text-hero-foreground/90">
-              <span className="size-1.5 rounded-full bg-primary" />
-              {hero.eyebrow}
+            {/* 작은 머리글 (알약 모양 배지): 반투명 유리 느낌 + 깜빡이는 초록 점
+                 " - " 뒤의 글자(예: 애드팟)는 초록색으로 강조. 회전은 globals.css 의 badge-spin */}
+            <p className="inline-flex animate-badge-spin items-center gap-2.5 rounded-full bg-linear-to-r from-hero-foreground/[0.09] via-hero-foreground/[0.04] to-primary/15 px-4 py-1.5 text-sm font-medium tracking-wide shadow-lg shadow-black/20 ring-1 ring-hero-foreground/15 inset-shadow-2xs inset-shadow-hero-foreground/25 backdrop-blur-md motion-reduce:animate-none">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary/70 motion-reduce:animate-none" />
+                <span className="relative inline-flex size-2 rounded-full bg-primary shadow-[0_0_8px] shadow-primary" />
+              </span>
+              <span className="bg-linear-to-r from-hero-foreground to-hero-muted bg-clip-text text-transparent">
+                {eyebrowLead}
+              </span>
+              {eyebrowBrand ? (
+                <>
+                  <span aria-hidden className="h-3 w-px bg-hero-foreground/25" />
+                  <span className="font-bold text-primary">{eyebrowBrand}</span>
+                </>
+              ) : null}
             </p>
 
             {/* 큰 제목: 줄마다 나누고, 여러 줄이면 마지막 줄을 초록색으로 강조 */}
@@ -96,7 +112,7 @@ export async function Hero() {
                 const highlight = titleLines.length > 1 && i === titleLines.length - 1;
                 return (
                   <span key={i} className={cn("block", highlight && "font-bold text-primary")}>
-                    {line}
+                    <MagnifyText text={line} />
                   </span>
                 );
               })}
@@ -108,19 +124,19 @@ export async function Hero() {
                 <li key={tag} className="flex items-center gap-2">
                   {i > 0 ? <span className="text-primary">+</span> : null}
                   <span className="rounded-full bg-hero-foreground/10 px-3 py-1 text-sm font-semibold text-hero-foreground ring-1 ring-hero-foreground/15">
-                    {tag}
+                    <MagnifyText text={tag} />
                   </span>
                 </li>
               ))}
             </ul>
             <p className="mt-5 max-w-xl whitespace-pre-line text-lg leading-relaxed text-hero-muted">
-              {hero.description}
+              <MagnifyText text={hero.description} />
             </p>
 
             <div className="mt-10 flex flex-wrap gap-3">
               <Button asChild size="lg" className="h-14 px-9 text-lg shadow-lg shadow-primary/30">
                 <a href={hero.primaryCta.href}>
-                  {hero.primaryCta.label}
+                  <MagnifyText text={hero.primaryCta.label} />
                   <ArrowRight />
                 </a>
               </Button>
@@ -130,7 +146,9 @@ export async function Hero() {
                 variant="outline"
                 className="h-14 border-hero-foreground/30 bg-transparent px-8 text-lg text-hero-foreground hover:bg-hero-foreground/10 hover:text-hero-foreground"
               >
-                <a href={hero.secondaryCta.href}>{hero.secondaryCta.label}</a>
+                <a href={hero.secondaryCta.href}>
+                  <MagnifyText text={hero.secondaryCta.label} />
+                </a>
               </Button>
             </div>
           </div>
@@ -148,7 +166,7 @@ export async function Hero() {
                     className="aspect-[4/3] rounded-xl shadow-lg shadow-black/20"
                   />
                   <p className="mt-3 text-sm text-hero-foreground/90 sm:text-base">
-                    {item?.title ?? `이미지 ${i + 1}`}
+                    <MagnifyText text={item?.title ?? `이미지 ${i + 1}`} />
                   </p>
                 </li>
               ))}
@@ -161,7 +179,7 @@ export async function Hero() {
           <div className="absolute inset-0 bg-primary [clip-path:polygon(0_72%,100%_0,100%_100%,0_100%)]" />
           <div className="absolute inset-0 bg-background [clip-path:polygon(0_calc(72%+10px),100%_10px,100%_100%,0_100%)]" />
         </div>
-      </div>
+      </MagnifyArea>
 
       {/* ── 아래쪽: 이미지 5장 ── */}
       <div className="bg-background pb-20 pt-6 sm:pt-10">

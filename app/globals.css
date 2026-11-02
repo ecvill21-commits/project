@@ -206,6 +206,19 @@
       transform: scale(1);
     }
   }
+
+  /* 첫 화면 소제목 배지: 4초마다 가로 방향(세로축 기준)으로 한 바퀴 빙글 */
+  --animate-badge-spin: badge-spin 4s ease-in-out infinite;
+
+  @keyframes badge-spin {
+    0%,
+    70% {
+      transform: perspective(600px) rotateY(0deg);
+    }
+    100% {
+      transform: perspective(600px) rotateY(360deg);
+    }
+  }
 }
 
 /* 첫 화면 배경의 희미한 낙서 무늬 (말풍선, 별, 하트, 종이비행기, 카메라) */
