@@ -13,7 +13,7 @@ export const siteConfig = {
   name: "ADPHOT",
   /* 상단 메뉴의 이름 옆 소제목 (이름과 소제목 사이에 — 모양 구분선이 자동으로 들어감) */
   nameTagline: "ad & self studio",
-  title: "My Studio — 나의 첫 웹사이트",
+  title: "ADPHOT — ad & self studio",
   description: "바이브 코딩으로 만든 나의 웹사이트입니다.",
 
   /* 상단 메뉴 (href 의 #이름 은 아래 섹션의 id 와 같아야 해당 위치로 이동) */
