@@ -26,7 +26,7 @@ export async function Hero() {
     getItems("hero-cards"),
     getItems("showcase"),
   ]);
-  const { heroTagline, heroMainImage, heroBackImages } = siteConfig;
+  const { heroTagline, heroMainImage, heroBackImages, heroCardDetails } = siteConfig;
   const titleLines = hero.title.split("\n");
   // 배지 글자를 " - " 앞(설명)과 뒤(브랜드 이름)로 나눔
   const [eyebrowLead, eyebrowBrand] = hero.eyebrow.split(" - ");
@@ -157,30 +157,42 @@ export async function Hero() {
           {/* 2. 오른쪽 아래: 가운데 이미지 3장 */}
           <div className="order-2 lg:col-start-2 lg:row-start-2">
             <ul className="grid grid-cols-3 gap-3 sm:gap-5">
-              {cards.map((item, i) => (
+              {cards.map((item, i) => {
+                const detail = heroCardDetails[i];
+                // 관리자에서 올린 이미지가 없으면 site.config.ts 의 heroCardDetails 기본 사진을 사용
+                const imageUrl = item?.image_url ?? detail?.image ?? null;
+                return (
                 <li key={item?.id ?? `card-${i}`}>
                   {/* 누르면 16:9 팝업으로 크게 보기 (components/ui/image-popup.tsx).
+                       팝업 속 설명 글은 site.config.ts 의 heroCardDetails 에서 바꿈.
                        관리자에서 넣은 링크는 칸이 아니라 팝업 안의 "링크 열기" 버튼으로 열림 */}
                   <ImagePopup
-                    title={item?.title ?? `이미지 ${i + 1}`}
-                    imageUrl={item?.image_url}
+                    title={item?.title ?? detail?.imageAlt ?? `이미지 ${i + 1}`}
+                    imageUrl={imageUrl}
                     linkUrl={item?.link_url}
                     emptyLabel="관리자 → 가운데 3장에서 이미지를 올리면 여기 크게 보입니다"
+                    detail={detail}
                     className="rounded-xl"
                   >
                     <ImageSlot
-                      item={item && { ...item, link_url: null }}
+                      item={{
+                        title: item?.title ?? detail?.imageAlt ?? `이미지 ${i + 1}`,
+                        image_url: imageUrl,
+                        link_url: null,
+                      }}
                       label="관리자 → 가운데 3장"
                       sizes="(min-width: 1024px) 220px, 33vw"
                       tone="dark"
+                      fit={detail?.imageFit === "cover" ? "cover" : "contain"}
                       className="aspect-[4/3] rounded-xl shadow-lg shadow-black/20"
                     />
                   </ImagePopup>
                   <p className="mt-3 text-sm text-hero-foreground/90 sm:text-base">
-                    <MagnifyText text={item?.title ?? `이미지 ${i + 1}`} />
+                    <MagnifyText text={item?.title ?? detail?.caption ?? `이미지 ${i + 1}`} />
                   </p>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </div>
         </Container>
@@ -221,18 +233,21 @@ export async function Hero() {
 type SlotItem = Pick<Item, "title" | "image_url" | "link_url">;
 
 /* 이미지 한 칸. 이미지가 있으면 보여주고, 없으면 점선 안내를 보여줍니다.
-   관리자 페이지에서 링크를 넣으면 이미지를 눌렀을 때 그 주소가 새 탭으로 열립니다. */
+   관리자 페이지에서 링크를 넣으면 이미지를 눌렀을 때 그 주소가 새 탭으로 열립니다.
+   fit: "cover" = 칸에 꽉 차게(넘치는 부분은 잘림), "contain" = 잘리지 않게 전체를 칸 안에(남는 곳은 배경색) */
 function ImageSlot({
   item,
   label,
   sizes,
   tone,
+  fit = "cover",
   className,
 }: {
   item?: SlotItem;
   label: string;
   sizes: string;
   tone: "dark" | "light";
+  fit?: "cover" | "contain";
   className?: string;
 }) {
   const dark = tone === "dark";
@@ -241,7 +256,7 @@ function ImageSlot({
       className={cn(
         "relative overflow-hidden",
         item?.image_url
-          ? dark && "ring-1 ring-hero-foreground/10"
+          ? cn(dark && "ring-1 ring-hero-foreground/10", fit === "contain" && (dark ? "bg-hero-foreground/5" : "bg-muted"))
           : dark
             ? "border-2 border-dashed border-hero-foreground/25 bg-hero-foreground/5"
             : "border-2 border-dashed border-border bg-muted",
@@ -254,7 +269,10 @@ function ImageSlot({
           alt={item.title}
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className={cn(
+            "transition-transform duration-500 group-hover:scale-105",
+            fit === "contain" ? "object-contain" : "object-cover"
+          )}
         />
       ) : (
         <div

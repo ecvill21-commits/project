@@ -10,7 +10,9 @@ import type { Item } from "@/lib/types";
 
 export const siteConfig = {
   /* 브라우저 탭 제목과 검색 결과에 보이는 정보 */
-  name: "My Studio",
+  name: "ADPHOT",
+  /* 상단 메뉴의 이름 옆 소제목 (이름과 소제목 사이에 — 모양 구분선이 자동으로 들어감) */
+  nameTagline: "ad & self studio",
   title: "My Studio — 나의 첫 웹사이트",
   description: "바이브 코딩으로 만든 나의 웹사이트입니다.",
 
@@ -44,6 +46,58 @@ export const siteConfig = {
 
   /* 첫 화면 소제목 위의 핵심 기능 (사이에 + 가 자동으로 붙음) */
   heroTagline: ["QR 다운로드", "SNS 공유", "로고 자동 삽입"],
+
+  /* 가운데 이미지 3장을 눌렀을 때 뜨는 팝업 속 글자 (첫 번째 = 이미지 1, 두 번째 = 이미지 2 ...)
+     eyebrow = 작은 머리글, title = 큰 제목, points = 칸 여러 개 (label = 작은 꼬리표, 없어도 됨)
+     image = 관리자에서 이미지를 올리지 않았을 때 보이는 기본 사진 (public/images 에), imageAlt = 사진 설명
+     imageFit = 작은 칸에서 사진 맞추는 방법: "cover" = 칸에 꽉 차게(양옆이 조금 잘림), 없으면 잘리지 않게 전체
+     caption = 작은 칸 아래 보이는 문구 */
+  heroCardDetails: [
+    {
+      caption: "지역 및 관광",
+      // 사진: 사용자가 준 이미지 (꽃 정원 유원지에 설치된 AD & PHOTO 부스)
+      image: "/images/hero-card-booth-park-wide.webp",
+      imageAlt: "관람차와 회전목마가 있는 꽃 정원 유원지에 설치된 AD & PHOTO 무인 셀프 스튜디오와 방문객들",
+      imageFit: "cover",
+      eyebrow: "핵심 기능",
+      title: "찍는 순간부터 SNS 노출까지\n자동으로 완성되는 홍보 사이클",
+      description: "방문객의 사진 한 장이 광고비 없이 브랜드를 알리는 4단계 흐름입니다.",
+      points: [
+        { label: "STEP 01", title: "고화질 촬영", text: "포토부스에서 바로 촬영하면 브랜드 로고와 날짜가 프레임에 자동으로 들어갑니다." },
+        { label: "STEP 02", title: "QR 다운로드", text: "스마트폰으로 QR을 한 번 찍으면 사진이 바로 저장됩니다." },
+        { label: "STEP 03", title: "SNS 공유", text: "인스타그램·카카오톡에 자연스럽게 올라가 지인에게 퍼져 나갑니다." },
+        { label: "STEP 04", title: "브랜드 노출", text: "로고가 담긴 사진이 광고비 없는 자연 바이럴을 완성합니다." },
+      ],
+    },
+    {
+      caption: "골프클럽 및 유원지",
+      // 사진: John Apps, Unsplash (unsplash.com/photos/WDl5OoC5xsg) — Unsplash 라이선스, 무료 사용 가능
+      image: "/images/hero-card-golf-clubhouse-bright.jpg",
+      imageAlt: "맑은 날 클럽하우스 앞 그린에서 골프를 치는 사람들",
+      eyebrow: "제안 사양",
+      title: "브랜드를 담아내는\n프리미엄 포토부스",
+      description: "설치부터 운영·디자인까지 협의해 맞춤형으로 만들어 드립니다.",
+      points: [
+        { label: "크기 / 구성", title: "약 2평 내외의 컴팩트 부스", text: "파우더룸 + 촬영룸, 고급 인테리어 마감" },
+        { label: "공유 기능", title: "찍고 바로 나누는 사진", text: "QR 즉시 다운로드, 모바일 바로 전송, 인스타·카카오 공유, 즉석 인쇄(선택)" },
+        { label: "브랜드 삽입", title: "모든 사진에 브랜드가 함께", text: "브랜드 로고·촬영 날짜·QR코드 자동 삽입, 시즌별 이벤트 프레임" },
+      ],
+    },
+    {
+      caption: "종합운동장 및 종합병원",
+      // 사진: Szcze hoo, Unsplash (unsplash.com/photos/tn58Vlh9Th4) — Unsplash 라이선스, 무료 사용 가능
+      image: "/images/hero-card-stadium.jpg",
+      imageAlt: "푸른 관중석과 육상 트랙, 잔디 경기장이 있는 종합운동장",
+      eyebrow: "기대 효과",
+      title: "SNS 공유 한 번이 만드는\n강력한 홍보 파급 효과",
+      description: "방문객이 QR로 저장하고 SNS에 올리는 순간, 브랜드가 광고비 없이 퍼져 나갑니다.",
+      points: [
+        { label: "EFFECT 01", title: "강력한 바이럴 홍보", text: "방문객의 게시물 하나가 수백~수천 명에게 브랜드를 보여 줍니다. 공유가 쉬워 업로드가 늘어납니다." },
+        { label: "EFFECT 02", title: "기억에 남는 브랜드", text: "로고와 날짜가 담긴 프레임이 퍼지며 '감각적이고 세심한 브랜드'로 기억됩니다." },
+        { label: "EFFECT 03", title: "전 고객층 입소문", text: "가족·연인·친구 등 나이와 관계없이 모든 방문객이 지인과 나누며 입소문이 납니다." },
+      ],
+    },
+  ],
 
   /* 휴대폰 대화 그림 속 글자 (components/sections/phone-mockup.tsx — 지금은 첫 화면에서 쓰지 않음)
      from: "me" = 내가 보낸 초록 말풍선, "them" = 상대 말풍선 */

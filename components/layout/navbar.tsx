@@ -19,7 +19,12 @@ export function Navbar() {
           <span className="flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/30">
             <Sparkles className="size-4.5" />
           </span>
-          {siteConfig.name}
+          {/* 주제목 — 소제목 (site.config.ts 의 name, nameTagline) */}
+          <span>{siteConfig.name}</span>
+          <span aria-hidden className="h-0.5 w-4 rounded-full bg-primary sm:w-5" />
+          <span className="text-xs font-medium tracking-wide text-nav-foreground/70 sm:text-sm">
+            {siteConfig.nameTagline}
+          </span>
         </Link>
 
         {/* 데스크톱 메뉴 */}
