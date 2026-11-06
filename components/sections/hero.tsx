@@ -52,7 +52,9 @@ export async function Hero() {
               첫째 줄: [메인 이미지] [글자 + 버튼]  ← 둘 다 아래쪽에 맞춰서, 이미지 아래선 = 버튼 아래선
               둘째 줄: [   (빈칸)  ] [가운데 이미지 3장]
             모바일: 글자 + 버튼 → 이미지 3장 → 메인 이미지 순서로 한 줄씩 */}
-        <Container className="grid gap-12 pt-14 pb-24 sm:pt-20 sm:pb-32 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16 lg:pb-36">
+        {/* 컴퓨터 화면(lg 이상)에서는 위 여백·글자 크기·간격을 화면 높이(vh)에 맞춰 줄여서
+             1080p(1920×1080) 화면에서 상단 메뉴 + 가운데 이미지 3장까지 한 화면에 들어오게 함 */}
+        <Container className="grid gap-12 pt-14 pb-24 sm:pt-20 sm:pb-32 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16 lg:gap-y-[3vh] lg:pt-[4vh] lg:pb-36">
           {/* 1. 왼쪽 메인 이미지 (컴퓨터 화면에서는 -translate-x-[5%] 로 이미지 폭의 5% 만큼 왼쪽으로) */}
           <div className="relative z-10 order-3 mx-auto w-full max-w-[400px] lg:col-start-1 lg:row-start-1 lg:self-end lg:-translate-x-[5%]">
             {/* 메인 이미지 뒤의 네컷 사진 2장 (site.config.ts 의 heroBackImages)
@@ -108,7 +110,7 @@ export async function Hero() {
             </p>
 
             {/* 큰 제목: 줄마다 나누고, 여러 줄이면 마지막 줄을 초록색으로 강조 */}
-            <h1 className="mt-6 text-4xl font-light leading-[1.2] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+            <h1 className="mt-6 text-4xl font-light leading-[1.2] tracking-tight sm:text-5xl lg:mt-[2vh] lg:text-[clamp(2.25rem,5vh,3.4rem)]">
               {titleLines.map((line, i) => {
                 const highlight = titleLines.length > 1 && i === titleLines.length - 1;
                 return (
@@ -120,7 +122,7 @@ export async function Hero() {
             </h1>
 
             {/* 핵심 기능 + 소제목 */}
-            <ul className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-2">
+            <ul className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-2 lg:mt-[2.5vh]">
               {heroTagline.map((tag, i) => (
                 <li key={tag} className="flex items-center gap-2">
                   {i > 0 ? <span className="text-primary">+</span> : null}
@@ -130,11 +132,11 @@ export async function Hero() {
                 </li>
               ))}
             </ul>
-            <p className="mt-5 max-w-xl whitespace-pre-line text-lg leading-relaxed text-hero-muted">
+            <p className="mt-5 max-w-xl whitespace-pre-line text-lg leading-relaxed text-hero-muted lg:mt-[1.5vh]">
               <MagnifyText text={hero.description} />
             </p>
 
-            <div className="mt-10 flex flex-wrap gap-3">
+            <div className="mt-10 flex flex-wrap gap-3 lg:mt-[3vh]">
               <Button asChild size="lg" className="h-14 px-9 text-lg shadow-lg shadow-primary/30">
                 <a href={hero.primaryCta.href}>
                   <MagnifyText text={hero.primaryCta.label} />
