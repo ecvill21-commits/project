@@ -6,6 +6,7 @@ import { getHeroText, getItems } from "@/lib/data";
 import type { Item } from "@/lib/types";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { ImagePopup } from "@/components/ui/image-popup";
 import { MagnifyArea, MagnifyText } from "@/components/ui/magnify-text";
 import { cn } from "@/lib/utils";
 
@@ -158,13 +159,23 @@ export async function Hero() {
             <ul className="grid grid-cols-3 gap-3 sm:gap-5">
               {cards.map((item, i) => (
                 <li key={item?.id ?? `card-${i}`}>
-                  <ImageSlot
-                    item={item}
-                    label="관리자 → 가운데 3장"
-                    sizes="(min-width: 1024px) 220px, 33vw"
-                    tone="dark"
-                    className="aspect-[4/3] rounded-xl shadow-lg shadow-black/20"
-                  />
+                  {/* 누르면 16:9 팝업으로 크게 보기 (components/ui/image-popup.tsx).
+                       관리자에서 넣은 링크는 칸이 아니라 팝업 안의 "링크 열기" 버튼으로 열림 */}
+                  <ImagePopup
+                    title={item?.title ?? `이미지 ${i + 1}`}
+                    imageUrl={item?.image_url}
+                    linkUrl={item?.link_url}
+                    emptyLabel="관리자 → 가운데 3장에서 이미지를 올리면 여기 크게 보입니다"
+                    className="rounded-xl"
+                  >
+                    <ImageSlot
+                      item={item && { ...item, link_url: null }}
+                      label="관리자 → 가운데 3장"
+                      sizes="(min-width: 1024px) 220px, 33vw"
+                      tone="dark"
+                      className="aspect-[4/3] rounded-xl shadow-lg shadow-black/20"
+                    />
+                  </ImagePopup>
                   <p className="mt-3 text-sm text-hero-foreground/90 sm:text-base">
                     <MagnifyText text={item?.title ?? `이미지 ${i + 1}`} />
                   </p>
